@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc -l:*)",
+      "Bash(python3:*)",
+      "Bash(python:*)",
+      "Bash(node -e:*)",
+      "Bash(node:*)",
+      "Bash(npm install:*)",
+      "Bash(pip show:*)",
+      "Bash(py:*)",
+      "Bash(where:*)"
+    ]
+  }
+}
