@@ -783,14 +783,30 @@
                             <div id="errorNumeroEnsaio" class="error-message hidden"></div>
                         </div>
                         <div class="form-group">
-                            <label for="dataRealizacao">
+                            <label for="dataRealizacaoMes">
                                 Data da Realização
-                                <span class="label-hint">(Opcional)</span>
+                                <span class="label-hint">(Mês/Ano - Opcional)</span>
                             </label>
-                            <input 
-                                type="date" 
-                                id="dataRealizacao"
-                            >
+                            <div style="display: flex; gap: 8px;">
+                                <select id="dataRealizacaoMes" style="flex: 1;">
+                                    <option value="">Mês</option>
+                                    <option value="01">01 - Janeiro</option>
+                                    <option value="02">02 - Fevereiro</option>
+                                    <option value="03">03 - Março</option>
+                                    <option value="04">04 - Abril</option>
+                                    <option value="05">05 - Maio</option>
+                                    <option value="06">06 - Junho</option>
+                                    <option value="07">07 - Julho</option>
+                                    <option value="08">08 - Agosto</option>
+                                    <option value="09">09 - Setembro</option>
+                                    <option value="10">10 - Outubro</option>
+                                    <option value="11">11 - Novembro</option>
+                                    <option value="12">12 - Dezembro</option>
+                                </select>
+                                <select id="dataRealizacaoAno" style="flex: 1;">
+                                    <option value="">Ano</option>
+                                </select>
+                            </div>
                             <div id="errorDataRealizacao" class="error-message hidden"></div>
                         </div>
                     </div>
@@ -881,6 +897,24 @@
             if (CAPACIDADE_ELEVACAO[carga]) return { cap: CAPACIDADE_ELEVACAO[carga], carga: carga };
             const cargaPorLargura = LARGURA_PARA_CARGA[larguraMM];
             if (cargaPorLargura && CAPACIDADE_ELEVACAO[cargaPorLargura]) return { cap: CAPACIDADE_ELEVACAO[cargaPorLargura], carga: cargaPorLargura };
+            return null;
+        }
+
+        // Tabela de capacidades para Amarração (chave = CMT em kg, laco = reta x 2)
+        const CAPACIDADE_AMARRACAO = {
+            800:   { reta: 800,   laco: 1600 },
+            1500:  { reta: 1500,  laco: 3000 },
+            2000:  { reta: 2000,  laco: 4000 },
+            3000:  { reta: 3000,  laco: 6000 },
+            4000:  { reta: 4000,  laco: 8000 },
+            5000:  { reta: 5000,  laco: 10000 },
+            7000:  { reta: 7000,  laco: 14000 },
+            8000:  { reta: 8000,  laco: 16000 },
+            10000: { reta: 10000, laco: 20000 }
+        };
+
+        function getCapAmarracao(cargaKg) {
+            if (CAPACIDADE_AMARRACAO[cargaKg]) return { cap: CAPACIDADE_AMARRACAO[cargaKg], carga: cargaKg };
             return null;
         }
 
@@ -1158,61 +1192,61 @@
             return `
                 <div class="document" style="font-family: Arial, Helvetica, sans-serif;">
                     <!-- Logo SVG da Mave -->
-                    <div style="text-align: center; margin-bottom: 14px;">
-                        <img src="imagem/logo.png" alt="Logo Mave" style="width: 220px; height: 55px;">
+                    <div style="text-align: center; margin-bottom: 6px;">
+                        <img src="imagem/logo.png" alt="Logo Mave" style="width: 200px; height: 50px;">
                     </div>
                     
-                    <h1 style="text-align: center; font-weight: bold; font-size: 13px; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #000; text-decoration: underline;">
+                    <h1 style="text-align: center; font-weight: bold; font-size: 13px; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 2px solid #000; text-decoration: underline;">
                         CERTIFICADO DE CONFORMIDADE DO PRODUTO
                     </h1>
 
-                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 14px; border: 1px solid #000; font-size: 9pt;">
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px; border: 1px solid #000; font-size: 9pt;">
                         <tr style="border: 1px solid #000;">
                             <td style="font-weight: bold; padding: 4px 6px; background: #e5e7eb; border: 1px solid #000; width: 25%;">Produto</td>
-                            <td style="padding: 6px 8px; border: 1px solid #000;">${produto.produto}</td>
+                            <td style="padding: 3px 6px; border: 1px solid #000;">${produto.produto}</td>
                         </tr>
                         <tr style="border: 1px solid #000;">
                             <td style="font-weight: bold; padding: 4px 6px; background: #e5e7eb; border: 1px solid #000;">Matéria Prima</td>
-                            <td style="padding: 6px 8px; border: 1px solid #000;">${produto.materiaPrima}</td>
+                            <td style="padding: 3px 6px; border: 1px solid #000;">${produto.materiaPrima}</td>
                         </tr>
                         <tr style="border: 1px solid #000;">
                             <td style="font-weight: bold; padding: 4px 6px; background: #e5e7eb; border: 1px solid #000;">Dimensional</td>
-                            <td style="padding: 6px 8px; border: 1px solid #000;">${produto.dimensional}</td>
+                            <td style="padding: 3px 6px; border: 1px solid #000;">${produto.dimensional}</td>
                         </tr>
                         <tr style="border: 1px solid #000;">
                             <td style="font-weight: bold; padding: 4px 6px; background: #e5e7eb; border: 1px solid #000;">Capacidade</td>
-                            <td style="padding: 6px 8px; border: 1px solid #000;">${produto.capacidade}</td>
+                            <td style="padding: 3px 6px; border: 1px solid #000;">${produto.capacidade}</td>
                         </tr>
                         <tr style="border: 1px solid #000;">
                             <td style="font-weight: bold; padding: 4px 6px; background: #e5e7eb; border: 1px solid #000;">Cor</td>
-                            <td style="padding: 6px 8px; border: 1px solid #000;">${state.cor}</td>
+                            <td style="padding: 3px 6px; border: 1px solid #000;">${state.cor}</td>
                         </tr>
                         <tr style="border: 1px solid #000;">
                             <td style="font-weight: bold; padding: 4px 6px; background: #e5e7eb; border: 1px solid #000;">Descrição</td>
-                            <td style="padding: 6px 8px; border: 1px solid #000;">${produto.descricao}</td>
+                            <td style="padding: 3px 6px; border: 1px solid #000;">${produto.descricao}</td>
                         </tr>
                         <tr style="border: 1px solid #000;">
                             <td style="font-weight: bold; padding: 4px 6px; background: #e5e7eb; border: 1px solid #000;">Data</td>
-                            <td style="padding: 6px 8px; border: 1px solid #000;">${dataAtual}</td>
+                            <td style="padding: 3px 6px; border: 1px solid #000;">${dataAtual}</td>
                         </tr>
                         <tr style="border: 1px solid #000;">
                             <td style="font-weight: bold; padding: 4px 6px; background: #e5e7eb; border: 1px solid #000;">Cliente</td>
-                            <td style="padding: 6px 8px; border: 1px solid #000;">${state.razaoSocial}</td>
+                            <td style="padding: 3px 6px; border: 1px solid #000;">${state.razaoSocial}</td>
                         </tr>
                         <tr style="border: 1px solid #000;">
                             <td style="font-weight: bold; padding: 4px 6px; background: #e5e7eb; border: 1px solid #000;">CNPJ</td>
-                            <td style="padding: 6px 8px; border: 1px solid #000;">${state.cnpj}</td>
+                            <td style="padding: 3px 6px; border: 1px solid #000;">${state.cnpj}</td>
                         </tr>
                         ${state.notaFiscal ? `
                         <tr style="border: 1px solid #000;">
                             <td style="font-weight: bold; padding: 4px 6px; background: #e5e7eb; border: 1px solid #000;">Nota Fiscal</td>
-                            <td style="padding: 6px 8px; border: 1px solid #000;">${state.notaFiscal}</td>
+                            <td style="padding: 3px 6px; border: 1px solid #000;">${state.notaFiscal}</td>
                         </tr>
                         ` : ''}
                     </table>
                     
-                    <div style="margin-bottom: 14px; border: 1px solid #000;">
-                        <div style="background: #d1d5db; text-align: center; font-weight: bold; padding: 6px 8px; border: 1px solid #000; font-size: 9pt;">
+                    <div style="margin-bottom: 8px; border: 1px solid #000;">
+                        <div style="background: #d1d5db; text-align: center; font-weight: bold; padding: 3px 6px; border: 1px solid #000; font-size: 9pt;">
                             PROPRIEDADES FÍSICAS
                         </div>
                         <table style="width: 100%; font-size: 9pt;">
@@ -1239,7 +1273,7 @@
                         const cap = resultado ? resultado.cap : null;
                         const cargaReal = resultado ? resultado.carga : produto.limites.carga;
                         return `
-                    <div style="margin-bottom: 14px; border: 1px solid #000;">
+                    <div style="margin-bottom: 8px; border: 1px solid #000;">
                         <div style="text-align: center; font-weight: bold; padding: 3px 6px; border-bottom: 1px solid #000; font-size: 9pt;">
                             APLICAÇÃO
                         </div>
@@ -1273,46 +1307,68 @@
                             </tr>` : ''}
                         </table>
                     </div>`;
-                    })() : `
-                    <div style="text-align: center; margin-bottom: 14px; padding: 14px; background: linear-gradient(to bottom, #f3f4f6, #ffffff); border: 2px solid #d1d5db; border-radius: 6px;">
-                        <h3 style="font-size: 10pt; font-weight: bold; color: #1f2937; margin-bottom: 10px;">
-                            ILUSTRAÇÃO DO PRODUTO
-                        </h3>
-                        <div style="display: flex; justify-content: center; align-items: center; gap: 30px; flex-wrap: wrap;">
-                            ${SVG_CINTA + SVG_CATRACA}
+                    })() : (() => {
+                        const resultadoAmar = getCapAmarracao(produto.limites.carga);
+                        const capAmar = resultadoAmar ? resultadoAmar.cap : null;
+                        return `
+                    <div style="margin-bottom: 8px; border: 1px solid #000;">
+                        <div style="text-align: center; font-weight: bold; padding: 3px 6px; border-bottom: 1px solid #000; font-size: 9pt;">
+                            APLICAÇÃO
                         </div>
-                    </div>`}
+                        <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 9pt;">
+                            <colgroup>
+                                <col style="width: 26%"><col style="width: 37%"><col style="width: 37%">
+                            </colgroup>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold;">
+                                    Limites de Capacidade<br>por aplicação
+                                </td>
+                                <td style="border: 1px solid #000; padding: 4px; text-align: center;">
+                                    <img src="imagem/cinta-amarracao.png" alt="Aplicação Reta" style="max-width: 80%; height: auto; display: inline-block;">
+                                </td>
+                                <td style="border: 1px solid #000; padding: 4px; text-align: center;">
+                                    <img src="imagem/catraca.png" alt="Aplicação Laço/U" style="max-width: 80%; height: auto; display: inline-block;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold;">Limite de Ruptura</td>
+                                <td style="border: 1px solid #000; padding: 6px; text-align: center;">${capAmar ? capAmar.reta + ' KG' : ''}</td>
+                                <td style="border: 1px solid #000; padding: 6px; text-align: center;">${capAmar ? capAmar.laco + ' KG' : ''}</td>
+                            </tr>
+                        </table>
+                    </div>`;
+                    })()}
                     
-                    <div style="margin-bottom: 14px; border: 1px solid #000;">
-                        <div style="background: #d1d5db; text-align: center; font-weight: bold; padding: 6px 8px; border: 1px solid #000; font-size: 9pt;">
+                    <div style="margin-bottom: 8px; border: 1px solid #000;">
+                        <div style="background: #d1d5db; text-align: center; font-weight: bold; padding: 3px 6px; border: 1px solid #000; font-size: 9pt;">
                             RESULTADOS DOS ENSAIOS DE RUPTURA
                         </div>
                         <table style="width: 100%; font-size: 9pt;">
                             <tbody>
                                 <tr>
-                                    <td style="font-weight: bold; padding: 6px 8px; border: 1px solid #000; width: 20%;">Resultado</td>
-                                    <td style="padding: 6px 8px; border: 1px solid #000;">
+                                    <td style="font-weight: bold; padding: 3px 6px; border: 1px solid #000; width: 20%;">Resultado</td>
+                                    <td style="padding: 3px 6px; border: 1px solid #000;">
                                         <strong>Número de Ensaio</strong><br/>${state.numeroEnsaio || ''}
                                     </td>
-                                    <td style="padding: 6px 8px; border: 1px solid #000;">
-                                        <strong>Data da Realização</strong><br/>${state.dataRealizacao ? new Date(state.dataRealizacao).toLocaleDateString('pt-BR', {month: '2-digit', year: 'numeric'}) : ''}
+                                    <td style="padding: 3px 6px; border: 1px solid #000;">
+                                        <strong>Data da Realização</strong><br/>${state.dataRealizacao || ''}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="font-weight: bold; padding: 6px 8px; border: 1px solid #000;">Forma de Ensaio</td>
-                                    <td colspan="2" style="padding: 6px 8px; border: 1px solid #000;">
+                                    <td style="font-weight: bold; padding: 3px 6px; border: 1px solid #000;">Forma de Ensaio</td>
+                                    <td colspan="2" style="padding: 3px 6px; border: 1px solid #000;">
                                         Cinta e ou catraca presa entre os Ganchos na forma reta, no sentido vertical, tracionada gradualmente até a ruptura.
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="font-weight: bold; padding: 6px 8px; border: 1px solid #000;">Laudo</td>
-                                    <td colspan="2" style="padding: 6px 8px; border: 1px solid #000;">
+                                    <td style="font-weight: bold; padding: 3px 6px; border: 1px solid #000;">Laudo</td>
+                                    <td colspan="2" style="padding: 3px 6px; border: 1px solid #000;">
                                         Com base nos laudos certificamos que as cintas resistem à capacidade relacionada acima
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="font-weight: bold; padding: 6px 8px; border: 1px solid #000;">Equipamento Utilizado</td>
-                                    <td colspan="2" style="padding: 6px 8px; border: 1px solid #000;">
+                                    <td style="font-weight: bold; padding: 3px 6px; border: 1px solid #000;">Equipamento Utilizado</td>
+                                    <td colspan="2" style="padding: 3px 6px; border: 1px solid #000;">
                                         Máquina de ensaio a compressão com certificado de calibração, sendo que a empresa que executa os ensaios é credenciada pelo INMETRO.
                                     </td>
                                 </tr>
@@ -1320,14 +1376,13 @@
                         </table>
                     </div>
                     
-                    <div style="text-align: center; margin-top: 30px; margin-bottom: 14px; font-size: 9pt;">
-                        <div style="margin-bottom: 10px;">Garibaldi, ${state.dataRealizacao ? new Date(state.dataRealizacao).toLocaleDateString('pt-BR') : ''}.</div>
+                    <div style="text-align: center; margin-top: 12px; margin-bottom: 6px; font-size: 9pt;">
                         <div style="display: inline-block;">
-                            <img src="imagem/assinatura.png" alt="Assinatura" style="width: 300px; height: auto; display: block; margin: 0 auto;">
+                            <img src="imagem/assinatura.png" alt="Assinatura" style="width: 220px; height: auto; display: block; margin: 0 auto;">
                         </div>
                     </div>
-                    
-                    <div style="text-align: center; line-height: 1.4; margin-top: 14px; font-size: 8pt;">
+
+                    <div style="text-align: center; line-height: 1.3; margin-top: 6px; font-size: 8pt;">
                         <p style="font-weight: bold;">Mave Comércio de Acessórios Ltda</p>
                         <p>Rodovia RST 470/ Km 225,6 – Integração – Caixa Postal 103 – Fone 54 3464 1041</p>
                         <p>Cep: 95720-000 Garibaldi RS- Site www.mavebr.com</p>
@@ -1376,6 +1431,37 @@
                             ${produto.tipo === 'elevacao' ? SVG_ELEVACAO : SVG_CINTA + SVG_CATRACA}
                         </div>
                     </div>
+                    ${produto.tipo !== 'elevacao' ? (() => {
+                        const resultadoAmar = getCapAmarracao(produto.limites.carga);
+                        const capAmar = resultadoAmar ? resultadoAmar.cap : null;
+                        return `
+                    <div style="margin-bottom: 14px; border: 1px solid #000;">
+                        <div style="text-align: center; font-weight: bold; padding: 3px 6px; border-bottom: 1px solid #000; font-size: 9pt;">
+                            APLICAÇÃO
+                        </div>
+                        <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 9pt;">
+                            <colgroup>
+                                <col style="width: 26%"><col style="width: 37%"><col style="width: 37%">
+                            </colgroup>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold;">
+                                    Limites de Capacidade<br>por aplicação
+                                </td>
+                                <td style="border: 1px solid #000; padding: 4px; text-align: center;">
+                                    <img src="imagem/cinta-amarracao.png" alt="Aplicação Reta" style="max-width: 80%; height: auto; display: inline-block;">
+                                </td>
+                                <td style="border: 1px solid #000; padding: 4px; text-align: center;">
+                                    <img src="imagem/catraca.png" alt="Aplicação Laço/U" style="max-width: 80%; height: auto; display: inline-block;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold;">Limite de Ruptura</td>
+                                <td style="border: 1px solid #000; padding: 6px; text-align: center;">${capAmar ? capAmar.reta + ' KG' : ''}</td>
+                                <td style="border: 1px solid #000; padding: 6px; text-align: center;">${capAmar ? capAmar.laco + ' KG' : ''}</td>
+                            </tr>
+                        </table>
+                    </div>`;
+                    })() : ''}
 
                     <!-- Especificações -->
                     <div style="margin-bottom: 16px;">
@@ -1473,6 +1559,16 @@
         document.addEventListener('DOMContentLoaded', function() {
             updateProgressBar();
 
+            // Popular select de ano (descendente, do mais recente ao 2000)
+            const selAno = document.getElementById('dataRealizacaoAno');
+            const anoFinal = new Date().getFullYear() + 1;
+            for (let ano = anoFinal; ano >= 2000; ano--) {
+                const opt = document.createElement('option');
+                opt.value = String(ano);
+                opt.textContent = String(ano);
+                selAno.appendChild(opt);
+            }
+
             // Carregar produtos do JSON
             fetch('produtos.json')
                 .then(res => {
@@ -1553,15 +1649,25 @@
                 validateForm();
             });
             
-            // Data Realização
-            document.getElementById('dataRealizacao').addEventListener('change', function(e) {
-                state.dataRealizacao = e.target.value;
-                if (state.dataRealizacao) {
-                    e.target.classList.add('valid');
-                    e.target.classList.remove('invalid');
-                }
+            // Data Realização (mês + ano)
+            function atualizarDataRealizacao() {
+                const selMes = document.getElementById('dataRealizacaoMes');
+                const selAno = document.getElementById('dataRealizacaoAno');
+                const mes = selMes.value;
+                const ano = selAno.value;
+                state.dataRealizacao = (mes && ano) ? (mes + '/' + ano) : '';
+                [selMes, selAno].forEach(el => {
+                    if (el.value) {
+                        el.classList.add('valid');
+                        el.classList.remove('invalid');
+                    } else {
+                        el.classList.remove('valid');
+                    }
+                });
                 validateForm();
-            });
+            }
+            document.getElementById('dataRealizacaoMes').addEventListener('change', atualizarDataRealizacao);
+            document.getElementById('dataRealizacaoAno').addEventListener('change', atualizarDataRealizacao);
             
             // Botão visualizar
             document.getElementById('btnVisualizarCertificado').addEventListener('click', function() {
