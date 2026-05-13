@@ -9,7 +9,10 @@
       "Bash(npm install:*)",
       "Bash(pip show:*)",
       "Bash(py:*)",
-      "Bash(where:*)"
+      "Bash(where:*)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
