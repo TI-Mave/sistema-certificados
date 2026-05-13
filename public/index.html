@@ -1576,7 +1576,7 @@
                     return res.json();
                 })
                 .then(data => {
-                    produtos = processarProdutos(data).filter(p => p.limites.carga > 0);
+                    produtos = processarProdutos(data);
                     console.log('Produtos carregados:', produtos.length);
                     document.getElementById('searchProduto').disabled = false;
                     document.getElementById('searchProduto').placeholder = 'Digite o código ou nome do produto...';
